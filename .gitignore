@@ -35,3 +35,9 @@ judging/
 
 # Alertmanager config contains Discord webhook secret
 monitoring/alertmanager.yml
+
+# Claude Code
+.claude/
+
+# Coverage
+.coverage
