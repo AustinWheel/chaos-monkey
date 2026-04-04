@@ -14,16 +14,8 @@ services:
     health_check:
       http_path: /health
     envs:
-      - key: DATABASE_HOST
-        value: ${db.HOSTNAME}
-      - key: DATABASE_PORT
-        value: ${db.PORT}
-      - key: DATABASE_NAME
-        value: ${db.DATABASE}
-      - key: DATABASE_USER
-        value: ${db.USERNAME}
-      - key: DATABASE_PASSWORD
-        value: ${db.PASSWORD}
+      - key: DATABASE_URL
+        value: ${db.DATABASE_URL}
       - key: FLASK_DEBUG
         value: "false"
 
