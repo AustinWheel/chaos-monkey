@@ -1,5 +1,6 @@
 import logging
 
+import psutil
 from flask import Blueprint, Response
 from prometheus_client import (
     Counter,
@@ -42,9 +43,34 @@ ERROR_COUNT = Counter(
     ["method", "endpoint"],
 )
 
+# Saturation — CPU and memory usage
+CPU_USAGE = Gauge(
+    "system_cpu_percent",
+    "Current CPU usage percentage",
+)
+
+MEMORY_USAGE = Gauge(
+    "system_memory_percent",
+    "Current memory usage percentage",
+)
+
+MEMORY_USED_BYTES = Gauge(
+    "system_memory_used_bytes",
+    "Memory currently in use in bytes",
+)
+
+
+def _update_system_metrics():
+    """Refresh CPU and memory gauges with current values."""
+    CPU_USAGE.set(psutil.cpu_percent())
+    vm = psutil.virtual_memory()
+    MEMORY_USAGE.set(vm.percent)
+    MEMORY_USED_BYTES.set(vm.used)
+
 
 @prom_bp.route("/prom-metrics")
 def prometheus_metrics():
     """Expose metrics in Prometheus text format."""
+    _update_system_metrics()
     logger.info("Prometheus metrics scraped", extra={"component": "prometheus"})
     return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)

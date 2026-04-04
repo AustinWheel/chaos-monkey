@@ -1,0 +1,35 @@
+name: pe-hackathon
+region: nyc
+
+services:
+  - name: api
+    github:
+      repo: AustinWheel/PE-Hackathon-Template-2026
+      branch: main
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    health_check:
+      http_path: /health
+    envs:
+      - key: DATABASE_HOST
+        value: ${db.HOSTNAME}
+      - key: DATABASE_PORT
+        value: ${db.PORT}
+      - key: DATABASE_NAME
+        value: ${db.DATABASE}
+      - key: DATABASE_USER
+        value: ${db.USERNAME}
+      - key: DATABASE_PASSWORD
+        value: ${db.PASSWORD}
+      - key: FLASK_DEBUG
+        value: "false"
+
+databases:
+  - name: db
+    engine: PG
+    version: "16"
+    size: db-s-dev-database
+    num_nodes: 1

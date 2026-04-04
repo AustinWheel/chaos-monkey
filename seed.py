@@ -43,4 +43,10 @@ with app.app_context():
             Event.insert_many(batch).execute()
     print(f"Loaded {len(rows)} events.")
 
+    # Fix auto-increment sequences after bulk insert with explicit IDs
+    db.execute_sql("SELECT setval('user_id_seq', (SELECT MAX(id) FROM \"user\"))")
+    db.execute_sql("SELECT setval('url_id_seq', (SELECT MAX(id) FROM url))")
+    db.execute_sql("SELECT setval('event_id_seq', (SELECT MAX(id) FROM event))")
+    print("Sequences reset.")
+
     print("Done!")
