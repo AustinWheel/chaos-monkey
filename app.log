@@ -883,3 +883,60 @@
 {"timestamp": "2026-04-04 10:57:39,209", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
 {"timestamp": "2026-04-04 10:57:39,224", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
 {"timestamp": "2026-04-04 10:57:39,226", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 10:57:54,207", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 10:57:54,221", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 10:57:54,222", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 10:58:09,210", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 10:58:09,222", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 10:58:09,223", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 10:58:24,209", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 10:58:24,223", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 10:58:24,224", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 10:58:39,210", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 10:58:39,221", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 10:58:39,222", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 10:58:54,206", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 10:58:54,219", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 10:58:54,220", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 10:59:09,211", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 10:59:09,224", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 10:59:09,225", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 10:59:24,216", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 10:59:24,232", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 10:59:24,233", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 10:59:39,208", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 10:59:39,221", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 10:59:39,222", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 10:59:54,211", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 10:59:54,225", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 10:59:54,226", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:00:09,207", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:00:09,220", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:00:09,221", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:00:24,213", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:00:24,227", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:00:24,228", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:00:39,211", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:00:39,221", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:00:39,222", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:00:54,216", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:00:54,233", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:00:54,235", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:01:09,210", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:01:09,224", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:01:09,225", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:01:24,218", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:01:24,241", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:01:24,243", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:01:39,207", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:01:39,215", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:01:39,215", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:01:54,209", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:01:54,223", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:01:54,224", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:02:09,207", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:02:09,219", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:02:09,220", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
+{"timestamp": "2026-04-04 11:02:24,210", "level": "INFO", "name": "app", "message": "Request received", "method": "GET", "path": "/prom-metrics", "remote_addr": "127.0.0.1"}
+{"timestamp": "2026-04-04 11:02:24,221", "level": "INFO", "name": "app.routes.prom_metrics", "message": "Prometheus metrics scraped", "component": "prometheus"}
+{"timestamp": "2026-04-04 11:02:24,222", "level": "INFO", "name": "app", "message": "Request completed", "method": "GET", "path": "/prom-metrics", "status": 200}
