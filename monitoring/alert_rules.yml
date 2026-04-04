@@ -1,0 +1,26 @@
+groups:
+  - name: app_alerts
+    rules:
+      # SERVICE DOWN: fires if Prometheus cannot scrape the app for 1 minute
+      - alert: ServiceDown
+        expr: up{job="flask-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service Down - Flask app is unreachable"
+          description: "The Flask app on port 5001 has been unreachable for over 1 minute."
+
+      # HIGH ERROR RATE: fires if >10% of requests are 5xx over a 2-minute window
+      - alert: HighErrorRate
+        expr: |
+          (
+            sum(rate(http_errors_total[2m]))
+            / clamp_min(sum(rate(http_requests_total[2m])), 0.001)
+          ) > 0.10
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Error Rate - Over 10% of requests are failing"
+          description: "More than 10% of HTTP requests have returned 5xx status codes over the last 2 minutes."

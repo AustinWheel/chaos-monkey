@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# Load alert rules
+rule_files:
+  - "alert_rules.yml"
+
+# Tell Prometheus where Alertmanager is running
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# Scrape your Flask app
+scrape_configs:
+  - job_name: "flask-app"
+    metrics_path: "/prom-metrics"
+    static_configs:
+      - targets:
+          - host.docker.internal:5001

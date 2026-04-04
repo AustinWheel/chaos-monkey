@@ -1,8 +1,9 @@
 import logging
 import sys
+import time
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, g, jsonify, request
 from pythonjsonlogger import json as json_logger
 
 
@@ -25,6 +26,7 @@ def setup_logging(app):
 
     @app.before_request
     def log_request():
+        g.start_time = time.time()
         app.logger.info("Request received", extra={
             "method": request.method,
             "path": request.path,
@@ -33,6 +35,33 @@ def setup_logging(app):
 
     @app.after_request
     def log_response(response):
+        from app.routes.prom_metrics import (
+            REQUEST_COUNT,
+            REQUEST_LATENCY,
+            ERROR_COUNT,
+        )
+
+        elapsed = time.time() - g.get("start_time", time.time())
+        endpoint = request.path
+
+        # Record metrics for Prometheus
+        REQUEST_COUNT.labels(
+            method=request.method,
+            endpoint=endpoint,
+            status=response.status_code,
+        ).inc()
+
+        REQUEST_LATENCY.labels(
+            method=request.method,
+            endpoint=endpoint,
+        ).observe(elapsed)
+
+        if response.status_code >= 500:
+            ERROR_COUNT.labels(
+                method=request.method,
+                endpoint=endpoint,
+            ).inc()
+
         app.logger.info("Request completed", extra={
             "method": request.method,
             "path": request.path,

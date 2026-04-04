@@ -13,3 +13,9 @@ def register_routes(app):
 
     from app.routes.logs import logs_bp
     app.register_blueprint(logs_bp)
+
+    from app.routes.chaos import chaos_bp
+    app.register_blueprint(chaos_bp)
+
+    from app.routes.prom_metrics import prom_bp
+    app.register_blueprint(prom_bp)

@@ -1,0 +1,50 @@
+import logging
+
+from flask import Blueprint, Response
+from prometheus_client import (
+    Counter,
+    Gauge,
+    Histogram,
+    generate_latest,
+    CONTENT_TYPE_LATEST,
+)
+
+logger = logging.getLogger(__name__)
+prom_bp = Blueprint("prom_metrics", __name__)
+
+# -- Metrics that Prometheus will scrape --
+
+# Total HTTP requests, labeled by method, endpoint, and status code
+REQUEST_COUNT = Counter(
+    "http_requests_total",
+    "Total HTTP requests",
+    ["method", "endpoint", "status"],
+)
+
+# How long requests take
+REQUEST_LATENCY = Histogram(
+    "http_request_duration_seconds",
+    "Request latency in seconds",
+    ["method", "endpoint"],
+)
+
+# Is the app up? 1 = healthy, 0 = unhealthy
+APP_UP = Gauge(
+    "app_up",
+    "Whether the application is up and healthy",
+)
+APP_UP.set(1)
+
+# Count of errors specifically (useful for High Error Rate alert)
+ERROR_COUNT = Counter(
+    "http_errors_total",
+    "Total HTTP 5xx errors",
+    ["method", "endpoint"],
+)
+
+
+@prom_bp.route("/prom-metrics")
+def prometheus_metrics():
+    """Expose metrics in Prometheus text format."""
+    logger.info("Prometheus metrics scraped", extra={"component": "prometheus"})
+    return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)

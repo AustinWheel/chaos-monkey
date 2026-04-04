@@ -32,3 +32,6 @@ Thumbs.db
 
 # Judging (not visible to participants)
 judging/
+
+# Alertmanager config contains Discord webhook secret
+monitoring/alertmanager.yml
