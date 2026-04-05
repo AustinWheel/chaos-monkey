@@ -9,40 +9,16 @@ https://github.com/user-attachments/assets/overview-compressed.mp4
 ## Architecture
 
 ```mermaid
-graph TB
-    subgraph "DigitalOcean App Platform — NYC"
-        LB[Load Balancer<br/>HTTPS]
-        I1[Instance 1<br/>6 gunicorn workers]
-        I2[Instance 2<br/>6 gunicorn workers]
-        I3[Instance 3<br/>6 gunicorn workers]
-        LB --> I1
-        LB --> I2
-        LB --> I3
-    end
-
-    subgraph "Managed Databases"
-        PG[(PostgreSQL 16<br/>hackathon-db)]
-        REDIS[(Redis/Valkey 8<br/>hackathon-redis)]
-    end
-
-    I1 & I2 & I3 --> PG
-    I1 & I2 & I3 --> REDIS
-
-    subgraph "Monitoring Droplet"
-        PROM[Prometheus :9090]
-        GRAF[Grafana :3000]
-        LOKI[Loki :3100]
-        SYNTH[Synthetic Traffic 24/7]
-        CHAOS[Chaos Monkey every 5m]
-    end
-
-    PROM -->|scrape /prom-metrics| LB
-    I1 & I2 & I3 -.->|logs| LOKI
-    GRAF --> PROM
-    GRAF --> LOKI
-    GRAF -->|alerts| DISCORD[Discord]
-    SYNTH -->|traffic| LB
-    CHAOS -->|failures| LB
+graph LR
+    Users --> LB[Load Balancer]
+    LB --> App[Flask App<br/>3 instances]
+    App --> PG[(PostgreSQL)]
+    App --> Redis[(Redis)]
+    App -.->|logs| Loki
+    Prometheus -->|scrape| App
+    Grafana --> Prometheus
+    Grafana --> Loki
+    Grafana -->|alerts| Discord
 ```
 
 **Production:** https://pe-hackathon-hni9m.ondigitalocean.app
