@@ -26,9 +26,8 @@ write_files:
       ExecStart=/usr/bin/python3 /root/synthetic_traffic.py
       Restart=always
       RestartSec=5
-      Environment=PROD_NYC_URL=https://pe-hackathon-muy5v.ondigitalocean.app
-      Environment=PROD_SFO_URL=https://pe-hackathon-prod-sfo-wkpqr.ondigitalocean.app
-      Environment=STAGING_URL=https://pe-hackathon-staging-f28oj.ondigitalocean.app
+      Environment=PROD_URL=http://104.248.125.189
+      Environment=STAGING_URL=http://137.184.196.25
       Environment=INTERVAL_SECONDS=3
 
       [Install]
@@ -44,8 +43,7 @@ write_files:
       Type=oneshot
       WorkingDirectory=/root
       ExecStart=/usr/bin/python3 /root/chaos_monkey.py
-      Environment=PROD_NYC_URL=https://pe-hackathon-muy5v.ondigitalocean.app
-      Environment=PROD_SFO_URL=https://pe-hackathon-prod-sfo-wkpqr.ondigitalocean.app
+      Environment=PROD_URL=http://104.248.125.189
       Environment=ALERTMANAGER_URL=http://localhost:9093
       Environment=CHAOS_INTERVAL_SECONDS=0
 

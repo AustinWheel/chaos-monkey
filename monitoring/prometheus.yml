@@ -3,33 +3,20 @@ global:
   evaluation_interval: 15s
 
 scrape_configs:
-  - job_name: "flask-prod-nyc"
+  - job_name: "flask-prod"
     metrics_path: "/prom-metrics"
-    scheme: https
+    scheme: http
     static_configs:
       - targets:
-          - pe-hackathon-muy5v.ondigitalocean.app
+          - 104.248.125.189
         labels:
-          region: "nyc"
-          environment: "prod"
-
-  - job_name: "flask-prod-sfo"
-    metrics_path: "/prom-metrics"
-    scheme: https
-    static_configs:
-      - targets:
-          - pe-hackathon-prod-sfo-wkpqr.ondigitalocean.app
-        labels:
-          region: "sfo"
           environment: "prod"
 
   - job_name: "flask-staging"
     metrics_path: "/prom-metrics"
-    scheme: https
+    scheme: http
     static_configs:
       - targets:
-          - pe-hackathon-staging-f28oj.ondigitalocean.app
+          - 137.184.196.25
         labels:
-          region: "nyc"
           environment: "staging"
-

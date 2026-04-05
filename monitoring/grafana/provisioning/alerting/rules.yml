@@ -6,8 +6,8 @@ groups:
     folder: Alerts
     interval: 1m
     rules:
-      - uid: service-down-nyc
-        title: Service Down — Prod NYC
+      - uid: service-down-prod
+        title: Service Down — Prod
         condition: C
         data:
           - refId: A
@@ -16,7 +16,7 @@ groups:
               to: 0
             datasourceUid: prometheus
             model:
-              expr: app_up{job="flask-prod-nyc"}
+              expr: app_up{job="flask-prod"}
               instant: true
               refId: A
           - refId: C
@@ -43,50 +43,9 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: Prod NYC is unreachable
+          summary: Production service is unreachable
           __dashboardUid__: overview
           __panelId__: "1"
-
-      - uid: service-down-sfo
-        title: Service Down — Prod SFO
-        condition: C
-        data:
-          - refId: A
-            relativeTimeRange:
-              from: 120
-              to: 0
-            datasourceUid: prometheus
-            model:
-              expr: app_up{job="flask-prod-sfo"}
-              instant: true
-              refId: A
-          - refId: C
-            relativeTimeRange:
-              from: 0
-              to: 0
-            datasourceUid: __expr__
-            model:
-              type: threshold
-              refId: C
-              conditions:
-                - evaluator:
-                    type: lt
-                    params: [1]
-                  operator:
-                    type: and
-                  query:
-                    params: [A]
-                  reducer:
-                    type: last
-              expression: A
-        for: 1m
-        noDataState: OK
-        labels:
-          severity: critical
-        annotations:
-          summary: Prod SFO is unreachable
-          __dashboardUid__: overview
-          __panelId__: "2"
 
       - uid: service-down-staging
         title: Service Down — Staging
@@ -125,9 +84,9 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: Staging is unreachable
+          summary: Staging service is unreachable
           __dashboardUid__: overview
-          __panelId__: "3"
+          __panelId__: "2"
 
   - orgId: 1
     name: Error Rate
@@ -145,8 +104,8 @@ groups:
             datasourceUid: prometheus
             model:
               expr: >
-                sum(rate(http_errors_total{environment="prod"}[2m]))
-                / clamp_min(sum(rate(http_requests_total{environment="prod"}[2m])), 0.001)
+                sum(rate(http_errors_total{job="flask-prod"}[2m]))
+                / clamp_min(sum(rate(http_requests_total{job="flask-prod"}[2m])), 0.001)
                 * 100
               instant: true
               refId: A
@@ -189,8 +148,8 @@ groups:
             datasourceUid: prometheus
             model:
               expr: >
-                sum(rate(http_errors_total{environment="prod"}[2m]))
-                / clamp_min(sum(rate(http_requests_total{environment="prod"}[2m])), 0.001)
+                sum(rate(http_errors_total{job="flask-prod"}[2m]))
+                / clamp_min(sum(rate(http_requests_total{job="flask-prod"}[2m])), 0.001)
                 * 100
               instant: true
               refId: A
@@ -239,7 +198,7 @@ groups:
             model:
               expr: >
                 histogram_quantile(0.95,
-                  sum by (le) (rate(http_request_duration_seconds_bucket{environment="prod"}[5m]))
+                  sum by (le) (rate(http_request_duration_seconds_bucket{job="flask-prod"}[5m]))
                 )
               instant: true
               refId: A
@@ -283,7 +242,7 @@ groups:
             model:
               expr: >
                 histogram_quantile(0.99,
-                  sum by (le) (rate(http_request_duration_seconds_bucket{environment="prod"}[5m]))
+                  sum by (le) (rate(http_request_duration_seconds_bucket{job="flask-prod"}[5m]))
                 )
               instant: true
               refId: A
@@ -330,7 +289,7 @@ groups:
               to: 0
             datasourceUid: prometheus
             model:
-              expr: max(system_cpu_percent{environment="prod"})
+              expr: system_cpu_percent{job="flask-prod"}
               instant: true
               refId: A
           - refId: C
@@ -357,7 +316,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "CPU usage above 80% on a prod instance"
+          summary: "CPU usage above 80% on prod"
           __dashboardUid__: overview
           __panelId__: "40"
 
@@ -371,7 +330,7 @@ groups:
               to: 0
             datasourceUid: prometheus
             model:
-              expr: max(system_memory_percent{environment="prod"})
+              expr: system_memory_percent{job="flask-prod"}
               instant: true
               refId: A
           - refId: C
@@ -398,7 +357,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Memory usage above 85% on a prod instance"
+          summary: "Memory usage above 85% on prod"
           __dashboardUid__: overview
           __panelId__: "41"
 
@@ -412,7 +371,7 @@ groups:
               to: 0
             datasourceUid: prometheus
             model:
-              expr: sum(http_requests_in_flight{environment="prod"})
+              expr: sum(http_requests_in_flight{job="flask-prod"})
               instant: true
               refId: A
           - refId: C

@@ -18,8 +18,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 logger = logging.getLogger("synthetic-traffic")
 
 TARGETS = {
-    "prod-nyc": os.environ.get("PROD_NYC_URL", ""),
-    "prod-sfo": os.environ.get("PROD_SFO_URL", ""),
+    "prod": os.environ.get("PROD_URL", ""),
     "staging": os.environ.get("STAGING_URL", ""),
 }
 

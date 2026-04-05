@@ -64,7 +64,7 @@ export function handleSummary(data) {
 
   const payload = JSON.stringify({
     tier: "gold",
-    target: BASE_URL.includes("staging") ? "staging" : BASE_URL.includes("sfo") ? "prod-sfo" : "prod-nyc",
+    target: BASE_URL.includes("staging") ? "staging" : "prod",
     req_per_sec: reqRate,
     p95_ms: p95,
     error_rate: errRate,
