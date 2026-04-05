@@ -8,27 +8,41 @@ https://github.com/user-attachments/assets/overview-compressed.mp4
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────┐
-│         DO App Platform (NYC)                    │
-│   ┌──────────┐  ┌──────────┐  ┌──────────┐      │
-│   │ Instance 1│  │ Instance 2│  │ Instance 3│     │
-│   │ 6 workers │  │ 6 workers │  │ 6 workers │     │
-│   └─────┬─────┘  └─────┬─────┘  └─────┬─────┘    │
-│         └───────────┬───────────────┘             │
-│              Load Balancer (HTTPS)                │
-└──────────────┬──────────────┬─────────────────────┘
-               │              │
-    ┌──────────▼───┐  ┌───────▼────────┐
-    │ Managed PG 16│  │ Managed Redis 8│
-    │ hackathon-db │  │ hackathon-redis│
-    └──────────────┘  └────────────────┘
+```mermaid
+graph TB
+    subgraph "DigitalOcean App Platform — NYC"
+        LB[Load Balancer<br/>HTTPS]
+        I1[Instance 1<br/>6 gunicorn workers]
+        I2[Instance 2<br/>6 gunicorn workers]
+        I3[Instance 3<br/>6 gunicorn workers]
+        LB --> I1
+        LB --> I2
+        LB --> I3
+    end
 
-┌──────────────────────────────────────────────────┐
-│      Monitoring Droplet (143.198.173.164)         │
-│  Prometheus :9090 │ Grafana :3000 │ Loki :3100    │
-│  Synthetic Traffic (24/7) │ Chaos Monkey (5min)   │
-└──────────────────────────────────────────────────┘
+    subgraph "Managed Databases"
+        PG[(PostgreSQL 16<br/>hackathon-db)]
+        REDIS[(Redis/Valkey 8<br/>hackathon-redis)]
+    end
+
+    I1 & I2 & I3 --> PG
+    I1 & I2 & I3 --> REDIS
+
+    subgraph "Monitoring Droplet"
+        PROM[Prometheus :9090]
+        GRAF[Grafana :3000]
+        LOKI[Loki :3100]
+        SYNTH[Synthetic Traffic 24/7]
+        CHAOS[Chaos Monkey every 5m]
+    end
+
+    PROM -->|scrape /prom-metrics| LB
+    I1 & I2 & I3 -.->|logs| LOKI
+    GRAF --> PROM
+    GRAF --> LOKI
+    GRAF -->|alerts| DISCORD[Discord]
+    SYNTH -->|traffic| LB
+    CHAOS -->|failures| LB
 ```
 
 **Production:** https://pe-hackathon-hni9m.ondigitalocean.app
