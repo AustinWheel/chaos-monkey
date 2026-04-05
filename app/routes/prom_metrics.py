@@ -36,6 +36,12 @@ APP_UP = Gauge(
 )
 APP_UP.set(1)
 
+# In-flight requests — saturation signal
+REQUESTS_IN_FLIGHT = Gauge(
+    "http_requests_in_flight",
+    "Number of HTTP requests currently being processed",
+)
+
 # Count of errors specifically (useful for High Error Rate alert)
 ERROR_COUNT = Counter(
     "http_errors_total",

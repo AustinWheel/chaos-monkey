@@ -53,6 +53,8 @@ def setup_logging(app):
 
     @app.before_request
     def log_request():
+        from app.routes.prom_metrics import REQUESTS_IN_FLIGHT
+        REQUESTS_IN_FLIGHT.inc()
         g.start_time = time.time()
         app.logger.info("Request received", extra={
             "method": request.method,
@@ -66,7 +68,9 @@ def setup_logging(app):
             REQUEST_COUNT,
             REQUEST_LATENCY,
             ERROR_COUNT,
+            REQUESTS_IN_FLIGHT,
         )
+        REQUESTS_IN_FLIGHT.dec()
 
         elapsed = time.time() - g.get("start_time", time.time())
         endpoint = request.path
