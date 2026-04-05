@@ -34,13 +34,8 @@ def setup_logging(app):
     stdout_handler.setFormatter(formatter)
     stdout_handler.addFilter(region_filter)
 
-    file_handler = logging.FileHandler("app.log")
-    file_handler.setFormatter(formatter)
-    file_handler.addFilter(region_filter)
-
     app.logger.handlers.clear()
     app.logger.addHandler(stdout_handler)
-    app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
 
     # Loki handler — only active when LOKI_URL is set
@@ -138,15 +133,20 @@ def create_app():
             app=app,
             key_func=get_remote_address,
             storage_uri=os.environ.get("REDIS_URL", "memory://"),
-            default_limits=["200 per minute"],
+            default_limits=["2000 per minute"],
         )
-        # Exempt monitoring endpoints
-        limiter.exempt(app.view_functions.get("health", lambda: None))
         app.limiter = limiter
     except ImportError:
         app.logger.warning("flask-limiter not installed, rate limiting disabled")
 
     register_routes(app)
+
+    # Exempt monitoring endpoints from rate limiting (after routes are registered)
+    if hasattr(app, "limiter"):
+        for endpoint_name in ["health", "prometheus_metrics", "metrics", "view_logs"]:
+            fn = app.view_functions.get(endpoint_name)
+            if fn:
+                app.limiter.exempt(fn)
 
     app._start_time = time.time()
 
