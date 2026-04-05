@@ -4,7 +4,7 @@ region: nyc
 services:
   - name: api
     github:
-      repo: AustinWheel/PE-Hackathon-Template-2026
+      repo: AustinWheel/chaos-monkey
       branch: main
       deploy_on_push: true
     dockerfile_path: Dockerfile
