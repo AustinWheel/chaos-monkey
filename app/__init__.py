@@ -121,9 +121,10 @@ def create_app():
     from app.models.event import Event
     from app.models.product import Product
     from app.models.alert import Alert
+    from app.models.loadtest import LoadTestResult
 
     with app.app_context():
-        db.create_tables([User, Url, Event, Product, Alert], safe=True)
+        db.create_tables([User, Url, Event, Product, Alert, LoadTestResult], safe=True)
 
     # Rate limiting
     try:

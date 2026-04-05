@@ -3,8 +3,11 @@ import logging
 import time
 import threading
 import urllib.request
+from datetime import datetime
 
 from flask import Blueprint, jsonify, request
+
+from app.models.alert import Alert
 
 logger = logging.getLogger(__name__)
 chaos_bp = Blueprint("chaos", __name__)
@@ -69,6 +72,16 @@ def chaos_health_fail():
         "Chaos: health check failure simulated",
         extra={"component": "chaos"},
     )
+
+    Alert.create(
+        alert_name="ServiceDown",
+        severity="critical",
+        status="firing",
+        summary="Health check failure simulated via chaos endpoint",
+        source="chaos/health-fail",
+        fired_at=datetime.utcnow(),
+    )
+
     return jsonify({"status": "unhealthy", "chaos": True}), 503
 
 
@@ -83,6 +96,16 @@ def chaos_error_flood():
             count,
             extra={"component": "chaos", "error_index": i + 1, "total": count},
         )
+
+    Alert.create(
+        alert_name="HighErrorRate",
+        severity="warning",
+        status="firing",
+        summary=f"Error flood: {count} errors generated via chaos endpoint",
+        source="chaos/error-flood",
+        fired_at=datetime.utcnow(),
+    )
+
     return jsonify({
         "chaos": "error_flood",
         "errors_generated": count,
@@ -105,6 +128,15 @@ def chaos_critical():
         "CRITICAL FAILURE: %s",
         message,
         extra={"component": "chaos", "severity": "critical"},
+    )
+
+    Alert.create(
+        alert_name="CriticalFailure",
+        severity="critical",
+        status="firing",
+        summary=message,
+        source="chaos/critical",
+        fired_at=datetime.utcnow(),
     )
 
     content = (

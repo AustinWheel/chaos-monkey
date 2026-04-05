@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
+import { relativeTime } from "@/lib/format";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -44,39 +47,28 @@ const TIERS = [
   },
 ];
 
-const MOCK_RESULTS = [
-  {
-    tier: "Bronze",
-    date: "2026-04-04 10:30",
-    target: "prod-nyc",
-    reqPerSec: 312,
-    p95: "1.2s",
-    errorRate: "0.3%",
-    status: "passed",
-  },
-  {
-    tier: "Silver",
-    date: "2026-04-04 09:15",
-    target: "prod-sfo",
-    reqPerSec: 845,
-    p95: "2.1s",
-    errorRate: "1.8%",
-    status: "passed",
-  },
-  {
-    tier: "Gold",
-    date: "2026-04-03 22:00",
-    target: "prod-nyc",
-    reqPerSec: 1523,
-    p95: "4.7s",
-    errorRate: "3.2%",
-    status: "passed",
-  },
-];
+interface LoadTestResult {
+  id: number;
+  tier: string;
+  target: string;
+  req_per_sec: number;
+  p95_ms: number;
+  error_rate: number;
+  status: string;
+  vus: number;
+  duration: string;
+  run_at: string;
+}
 
 export default function LoadTestPage() {
   const [target, setTarget] = useState("staging");
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
+
+  const { data: results, isLoading } = useSWR<LoadTestResult[]>(
+    "/api/loadtest",
+    fetcher,
+    { refreshInterval: 15000 }
+  );
 
   return (
     <div>
@@ -167,37 +159,47 @@ export default function LoadTestPage() {
           <CardTitle className="text-sm font-medium">Recent Results</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {MOCK_RESULTS.map((r, i) => (
-              <div
-                key={i}
-                className="flex items-center justify-between rounded border border-border p-3"
-              >
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline">{r.tier}</Badge>
-                  <Badge variant="outline">{r.target}</Badge>
-                  <span className="text-sm text-muted-foreground">
-                    {r.date}
-                  </span>
+          {isLoading ? (
+            <div className="flex h-32 items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
+            </div>
+          ) : !results || results.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">
+              No load test results yet. Run a k6 test to see results here.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {results.map((r) => (
+                <div
+                  key={r.id}
+                  className="flex items-center justify-between rounded border border-border p-3"
+                >
+                  <div className="flex items-center gap-3">
+                    <Badge variant="outline" className="capitalize">{r.tier}</Badge>
+                    <Badge variant="outline">{r.target}</Badge>
+                    <span className="text-sm text-muted-foreground">
+                      {relativeTime(r.run_at)}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span className="font-mono">{Math.round(r.req_per_sec)} req/s</span>
+                    <span className="font-mono">p95: {(r.p95_ms / 1000).toFixed(1)}s</span>
+                    <span className="font-mono">err: {r.error_rate.toFixed(1)}%</span>
+                    <Badge
+                      variant="outline"
+                      className={
+                        r.status === "passed"
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }
+                    >
+                      {r.status}
+                    </Badge>
+                  </div>
                 </div>
-                <div className="flex items-center gap-4 text-sm">
-                  <span className="font-mono">{r.reqPerSec} req/s</span>
-                  <span className="font-mono">p95: {r.p95}</span>
-                  <span className="font-mono">err: {r.errorRate}</span>
-                  <Badge
-                    variant="outline"
-                    className={
-                      r.status === "passed"
-                        ? "text-green-400"
-                        : "text-red-400"
-                    }
-                  >
-                    {r.status}
-                  </Badge>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

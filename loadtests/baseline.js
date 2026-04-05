@@ -57,3 +57,27 @@ export default function () {
   // Simulate think time between requests
   sleep(1);
 }
+
+export function handleSummary(data) {
+  const p95 = data.metrics.http_req_duration?.values?.["p(95)"] || 0;
+  const reqRate = data.metrics.http_reqs?.values?.rate || 0;
+  const errRate = (data.metrics.errors?.values?.rate || 0) * 100;
+  const passed = p95 < 5000 && errRate < 10;
+
+  const payload = JSON.stringify({
+    tier: "bronze",
+    target: BASE_URL.includes("staging") ? "staging" : BASE_URL.includes("sfo") ? "prod-sfo" : "prod-nyc",
+    req_per_sec: reqRate,
+    p95_ms: p95,
+    error_rate: errRate,
+    status: passed ? "passed" : "failed",
+    vus: 50,
+    duration: "30s",
+  });
+
+  http.post(`${BASE_URL}/loadtest/results`, payload, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+  return {};
+}

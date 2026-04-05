@@ -31,3 +31,6 @@ def register_routes(app):
 
     from app.routes.alerts import alerts_bp
     app.register_blueprint(alerts_bp)
+
+    from app.routes.loadtest import loadtest_bp
+    app.register_blueprint(loadtest_bp)
