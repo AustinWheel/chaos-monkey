@@ -16,11 +16,15 @@ def test_chaos_error_returns_json(client):
     assert "error" in data
 
 
-def test_chaos_health_fail_returns_503(client):
-    resp = client.get("/chaos/health-fail")
-    assert resp.status_code == 503
+def test_chaos_health_fail_activates(client):
+    resp = client.get("/chaos/health-fail?duration=5")
+    assert resp.status_code == 200
     data = resp.get_json()
-    assert data["status"] == "unhealthy"
+    assert data["chaos"] == "health_fail"
+
+    # /health should now return 503
+    resp = client.get("/health")
+    assert resp.status_code == 503
 
 
 def test_chaos_error_flood_returns_200(client):
