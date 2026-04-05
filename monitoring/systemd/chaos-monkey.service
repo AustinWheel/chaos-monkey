@@ -1,0 +1,11 @@
+[Unit]
+Description=Chaos Monkey Run
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root
+ExecStart=/usr/bin/python3 /root/chaos_monkey.py
+Environment=PROD_NYC_URL=https://pe-hackathon-muy5v.ondigitalocean.app
+Environment=PROD_SFO_URL=https://pe-hackathon-prod-sfo-wkpqr.ondigitalocean.app
+Environment=ALERTMANAGER_URL=http://localhost:9093
+Environment=CHAOS_INTERVAL_SECONDS=0

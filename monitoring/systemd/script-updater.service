@@ -1,0 +1,10 @@
+[Unit]
+Description=Update traffic scripts from GitHub
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root
+ExecStart=/bin/bash -c '\
+  curl -sf -o /root/synthetic_traffic.py https://raw.githubusercontent.com/AustinWheel/chaos-monkey/main/scripts/synthetic_traffic.py && \
+  curl -sf -o /root/chaos_monkey.py https://raw.githubusercontent.com/AustinWheel/chaos-monkey/main/scripts/chaos_monkey.py && \
+  systemctl restart synthetic-traffic'

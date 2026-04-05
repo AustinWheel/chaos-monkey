@@ -104,10 +104,15 @@ def run():
 
 
 if __name__ == "__main__":
-    logger.info(f"Chaos Monkey starting — interval: {INTERVAL}s")
-    while True:
-        try:
-            run()
-        except Exception as e:
-            logger.error(f"Chaos Monkey run failed: {e}")
-        time.sleep(INTERVAL)
+    if INTERVAL == 0:
+        # Single run mode (for systemd timer)
+        run()
+    else:
+        # Continuous mode (standalone)
+        logger.info(f"Chaos Monkey starting — interval: {INTERVAL}s")
+        while True:
+            try:
+                run()
+            except Exception as e:
+                logger.error(f"Chaos Monkey run failed: {e}")
+            time.sleep(INTERVAL)

@@ -1,0 +1,18 @@
+[Unit]
+Description=Synthetic Traffic Generator
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root
+ExecStart=/usr/bin/python3 /root/synthetic_traffic.py
+Restart=always
+RestartSec=5
+Environment=PROD_NYC_URL=https://pe-hackathon-muy5v.ondigitalocean.app
+Environment=PROD_SFO_URL=https://pe-hackathon-prod-sfo-wkpqr.ondigitalocean.app
+Environment=STAGING_URL=https://pe-hackathon-staging-f28oj.ondigitalocean.app
+Environment=INTERVAL_SECONDS=3
+
+[Install]
+WantedBy=multi-user.target
