@@ -27,7 +27,17 @@ def get_redis():
         logger.warning("Redis unavailable, caching disabled", extra={
             "component": "cache", "error": str(e),
         })
+        _redis_client = None
         return None
+
+
+def _handle_redis_error(operation, e):
+    """Log Redis errors and reset the client so reconnection is attempted."""
+    global _redis_client
+    logger.error("Redis %s failed, disabling cache until reconnect", operation, extra={
+        "component": "cache", "error": str(e),
+    })
+    _redis_client = None
 
 
 def cache_get(key):
@@ -39,8 +49,8 @@ def cache_get(key):
         val = r.get(key)
         if val is not None:
             return json.loads(val)
-    except Exception:
-        pass
+    except Exception as e:
+        _handle_redis_error("GET", e)
     return None
 
 
@@ -51,8 +61,8 @@ def cache_set(key, value, ttl=30):
         return
     try:
         r.setex(key, ttl, json.dumps(value, default=str))
-    except Exception:
-        pass
+    except Exception as e:
+        _handle_redis_error("SET", e)
 
 
 def cache_delete_pattern(pattern):
@@ -63,5 +73,5 @@ def cache_delete_pattern(pattern):
     try:
         for key in r.scan_iter(match=pattern):
             r.delete(key)
-    except Exception:
-        pass
+    except Exception as e:
+        _handle_redis_error("DELETE", e)
