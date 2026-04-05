@@ -149,10 +149,19 @@ def create_app():
                 app.limiter.exempt(fn)
 
     app._start_time = time.time()
+    app._health_fail_until = 0  # timestamp when forced health failure expires
 
     @app.route("/health")
     def health():
         from app.database import db
+
+        # Check if chaos health-fail is active
+        if time.time() < app._health_fail_until:
+            return jsonify({
+                "status": "unhealthy",
+                "chaos": True,
+                "resumes_in_seconds": round(app._health_fail_until - time.time(), 1),
+            }), 503
 
         health_data = {
             "status": "ok",

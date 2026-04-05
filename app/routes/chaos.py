@@ -67,22 +67,28 @@ def chaos_latency():
 
 @chaos_bp.route("/chaos/health-fail")
 def chaos_health_fail():
-    """Return a failing health check to trigger 'Service Down' alerts."""
+    """Make /health return 503 for a duration, triggering App Platform to restart the instance."""
+    from flask import current_app
+    duration = min(request.args.get("duration", 60, type=int), 300)
+
+    current_app._health_fail_until = time.time() + duration
+
     logger.critical(
-        "Chaos: health check failure simulated",
-        extra={"component": "chaos"},
+        "Chaos: health check will fail for %ds",
+        duration,
+        extra={"component": "chaos", "duration": duration},
     )
 
     Alert.create(
         alert_name="ServiceDown",
         severity="critical",
         status="firing",
-        summary="Health check failure simulated via chaos endpoint",
+        summary=f"Health check failing for {duration}s via chaos endpoint",
         source="chaos/health-fail",
         fired_at=datetime.utcnow(),
     )
 
-    return jsonify({"status": "unhealthy", "chaos": True}), 503
+    return jsonify({"chaos": "health_fail", "duration_seconds": duration, "status": "health check will return 503"})
 
 
 @chaos_bp.route("/chaos/error-flood")
