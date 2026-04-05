@@ -1,0 +1,23 @@
+#cloud-config
+# Cloud-init for app droplets (prod and staging).
+# Set as user data when creating the droplet — runs on first boot,
+# installs Docker, clones the repo, and starts the app stack.
+
+package_update: true
+packages:
+  - docker.io
+  - docker-compose
+  - git
+  - curl
+
+runcmd:
+  # Clone repo
+  - git clone https://github.com/AustinWheel/chaos-monkey.git /opt/app
+
+  # Seed the database
+  - cd /opt/app && docker compose -f app-droplet/docker-compose.yml up -d --build
+  - sleep 15
+  - cd /opt/app && docker compose -f app-droplet/docker-compose.yml exec -T app uv run python seed.py
+
+  # Verify health
+  - 'for i in $(seq 1 30); do STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/health); if [ "$STATUS" = "200" ]; then echo "App healthy"; exit 0; fi; echo "Attempt $i: status=$STATUS"; sleep 5; done; echo "App not healthy after 150s"'
