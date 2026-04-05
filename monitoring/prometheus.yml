@@ -41,3 +41,4 @@ scrape_configs:
         labels:
           region: "nyc"
           environment: "staging"
+

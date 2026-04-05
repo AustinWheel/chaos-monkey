@@ -12,6 +12,8 @@ contactPoints:
           message: |
             {{ range .Alerts }}
             **{{ .Labels.alertname }}** — {{ .Status | toUpper }}
-            Severity: {{ .Labels.severity }}
+            **Severity:** {{ .Labels.severity }}
             {{ .Annotations.summary }}
+            **Dashboard:** {{ .DashboardURL }}
+            **Alert rule:** {{ .SilenceURL }}
             {{ end }}

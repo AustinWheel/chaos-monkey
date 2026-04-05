@@ -39,10 +39,13 @@ groups:
                     type: last
               expression: A
         for: 1m
+        noDataState: OK
         labels:
           severity: critical
         annotations:
           summary: Prod NYC is unreachable
+          __dashboardUid__: overview
+          __panelId__: "1"
 
       - uid: service-down-sfo
         title: Service Down — Prod SFO
@@ -77,10 +80,13 @@ groups:
                     type: last
               expression: A
         for: 1m
+        noDataState: OK
         labels:
           severity: critical
         annotations:
           summary: Prod SFO is unreachable
+          __dashboardUid__: overview
+          __panelId__: "2"
 
       - uid: service-down-staging
         title: Service Down — Staging
@@ -115,10 +121,13 @@ groups:
                     type: last
               expression: A
         for: 1m
+        noDataState: OK
         labels:
           severity: warning
         annotations:
           summary: Staging is unreachable
+          __dashboardUid__: overview
+          __panelId__: "3"
 
   - orgId: 1
     name: Error Rate
@@ -161,10 +170,13 @@ groups:
                     type: last
               expression: A
         for: 30s
+        noDataState: OK
         labels:
           severity: warning
         annotations:
           summary: "Prod error rate is above 10%"
+          __dashboardUid__: overview
+          __panelId__: "30"
 
       - uid: critical-error-rate-prod
         title: Critical Error Rate — Prod
@@ -202,10 +214,13 @@ groups:
                     type: last
               expression: A
         for: 30s
+        noDataState: OK
         labels:
           severity: critical
         annotations:
           summary: "Prod error rate is above 25% — possible outage"
+          __dashboardUid__: overview
+          __panelId__: "30"
 
   - orgId: 1
     name: Latency
@@ -248,10 +263,13 @@ groups:
                     type: last
               expression: A
         for: 2m
+        noDataState: OK
         labels:
           severity: warning
         annotations:
           summary: "P95 latency above 2s in production"
+          __dashboardUid__: overview
+          __panelId__: "20"
 
       - uid: high-latency-p99
         title: Extreme P99 Latency — Prod
@@ -289,10 +307,13 @@ groups:
                     type: last
               expression: A
         for: 2m
+        noDataState: OK
         labels:
           severity: critical
         annotations:
           summary: "P99 latency above 5s — severe degradation"
+          __dashboardUid__: overview
+          __panelId__: "20"
 
   - orgId: 1
     name: Infrastructure
@@ -332,10 +353,13 @@ groups:
                     type: last
               expression: A
         for: 2m
+        noDataState: OK
         labels:
           severity: warning
         annotations:
           summary: "CPU usage above 80% on a prod instance"
+          __dashboardUid__: overview
+          __panelId__: "40"
 
       - uid: high-memory-prod
         title: High Memory Usage — Prod
@@ -370,10 +394,13 @@ groups:
                     type: last
               expression: A
         for: 2m
+        noDataState: OK
         labels:
           severity: warning
         annotations:
           summary: "Memory usage above 85% on a prod instance"
+          __dashboardUid__: overview
+          __panelId__: "41"
 
       - uid: high-saturation-prod
         title: High Request Saturation — Prod
@@ -408,7 +435,10 @@ groups:
                     type: last
               expression: A
         for: 1m
+        noDataState: OK
         labels:
           severity: warning
         annotations:
           summary: "Over 50 in-flight requests — nearing saturation"
+          __dashboardUid__: overview
+          __panelId__: "44"
