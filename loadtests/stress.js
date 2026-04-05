@@ -1,18 +1,17 @@
 import http from "k6/http";
-import { check, sleep } from "k6";
 import { Rate } from "k6/metrics";
 
 const errorRate = new Rate("errors");
 
-// Stress test: ramp to 1000 users to intentionally overwhelm the service
+// Stress test: sustained high load to overwhelm the service and trigger alerts
 export const options = {
   stages: [
-    { duration: "15s", target: 500 },   // ramp to 500
-    { duration: "15s", target: 1000 },  // ramp to 1000
-    { duration: "30s", target: 1000 },  // hold at 1000
-    { duration: "15s", target: 0 },     // ramp down
+    { duration: "10s", target: 300 },
+    { duration: "10s", target: 600 },
+    { duration: "10s", target: 1000 },
+    { duration: "5m", target: 1000 },  // hold at 1000 for 5 minutes
+    { duration: "10s", target: 0 },
   ],
-  // No thresholds — we expect this to fail
 };
 
 const BASE_URL = __ENV.BASE_URL || "http://localhost:8080";
@@ -30,5 +29,5 @@ export default function () {
   res = http.get(`${BASE_URL}/urls`);
   errorRate.add(res.status !== 200);
 
-  sleep(0.2);
+  // No sleep — fire as fast as possible
 }
