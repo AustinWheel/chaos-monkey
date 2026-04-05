@@ -5,18 +5,9 @@ global:
 scrape_configs:
   - job_name: "flask-prod"
     metrics_path: "/prom-metrics"
-    scheme: http
+    scheme: https
     static_configs:
       - targets:
-          - 104.248.125.189
+          - PLACEHOLDER_APP_URL
         labels:
           environment: "prod"
-
-  - job_name: "flask-staging"
-    metrics_path: "/prom-metrics"
-    scheme: http
-    static_configs:
-      - targets:
-          - 137.184.196.25
-        labels:
-          environment: "staging"

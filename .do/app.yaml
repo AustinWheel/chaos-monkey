@@ -1,0 +1,44 @@
+name: pe-hackathon
+region: nyc
+
+services:
+  - name: api
+    github:
+      repo: AustinWheel/chaos-monkey
+      branch: main
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    http_port: 8080
+    instance_size_slug: apps-d-1vcpu-2gb
+    instance_count: 2
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 10
+      period_seconds: 10
+      timeout_seconds: 5
+      failure_threshold: 3
+    envs:
+      - key: DATABASE_URL
+        value: ${db.DATABASE_URL}
+      - key: REDIS_URL
+        value: ${redis.REDIS_URL}
+      - key: FLASK_DEBUG
+        value: "false"
+      - key: APP_ENVIRONMENT
+        value: "prod"
+      - key: LOKI_URL
+        value: "http://143.198.173.164:3100"
+
+databases:
+  - name: db
+    engine: PG
+    version: "16"
+    production: true
+    cluster_name: hackathon-db
+    db_name: hackathon
+    db_user: hackathon
+  - name: redis
+    engine: REDIS
+    version: "8"
+    production: true
+    cluster_name: hackathon-redis

@@ -47,47 +47,6 @@ groups:
           __dashboardUid__: overview
           __panelId__: "1"
 
-      - uid: service-down-staging
-        title: Service Down — Staging
-        condition: C
-        data:
-          - refId: A
-            relativeTimeRange:
-              from: 120
-              to: 0
-            datasourceUid: prometheus
-            model:
-              expr: app_up{job="flask-staging"}
-              instant: true
-              refId: A
-          - refId: C
-            relativeTimeRange:
-              from: 0
-              to: 0
-            datasourceUid: __expr__
-            model:
-              type: threshold
-              refId: C
-              conditions:
-                - evaluator:
-                    type: lt
-                    params: [1]
-                  operator:
-                    type: and
-                  query:
-                    params: [A]
-                  reducer:
-                    type: last
-              expression: A
-        for: 1m
-        noDataState: OK
-        labels:
-          severity: warning
-        annotations:
-          summary: Staging service is unreachable
-          __dashboardUid__: overview
-          __panelId__: "2"
-
   - orgId: 1
     name: Error Rate
     folder: Alerts

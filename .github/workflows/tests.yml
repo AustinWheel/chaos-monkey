@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main, staging]
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -32,64 +32,27 @@ jobs:
         with:
           pytest-xml-coverage-path: coverage.xml
 
-  deploy-staging:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
-
-    steps:
-      - name: Deploy to staging droplet
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.STAGING_DROPLET_IP }}
-          username: root
-          key: ${{ secrets.DROPLET_SSH_KEY }}
-          script: |
-            cd /opt/app
-            git pull origin staging
-            docker compose -f app-droplet/docker-compose.yml up -d --build
-
-      - name: Verify staging health
-        run: |
-          echo "Waiting for staging to be healthy..."
-          for i in $(seq 1 30); do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.STAGING_DROPLET_IP }}/health)
-            if [ "$STATUS" = "200" ]; then
-              echo "Staging healthy!"
-              exit 0
-            fi
-            echo "Attempt $i: status=$STATUS, retrying in 10s..."
-            sleep 10
-          done
-          echo "Staging unhealthy after 5 minutes"
-          exit 1
-
   deploy-prod:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
-      - name: Deploy to prod droplet
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.PROD_DROPLET_IP }}
-          username: root
-          key: ${{ secrets.DROPLET_SSH_KEY }}
-          script: |
-            cd /opt/app
-            git pull origin main
-            docker compose -f app-droplet/docker-compose.yml up -d --build
+      - uses: actions/checkout@v4
 
-      - name: Verify prod health
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Deploy to production
+        run: doctl apps create-deployment ${{ secrets.DO_APP_ID }} --wait
+
+      - name: Verify health
         run: |
-          echo "Waiting for prod to be healthy..."
           for i in $(seq 1 30); do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.PROD_DROPLET_IP }}/health)
-            if [ "$STATUS" = "200" ]; then
-              echo "Prod healthy!"
-              exit 0
-            fi
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${{ secrets.APP_URL }}/health)
+            if [ "$STATUS" = "200" ]; then echo "Prod healthy!"; exit 0; fi
             echo "Attempt $i: status=$STATUS, retrying in 10s..."
             sleep 10
           done
