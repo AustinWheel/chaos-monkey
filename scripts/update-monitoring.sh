@@ -1,20 +1,32 @@
 #!/bin/bash
 # Pull latest config from git and restart the monitoring stack on the droplet.
-# Usage: ./scripts/update-monitoring.sh
+#
+# Usage: ./scripts/update-monitoring.sh [--reset]
+#
+# Environment variables:
+#   MONITORING_IP    - droplet IP (default: 143.198.173.164)
+#   MONITORING_USER  - SSH user (default: root)
+#   REPO_BRANCH      - git branch to pull (default: main)
+#   REPO_PATH        - path to repo on droplet (default: /opt/monitoring-repo)
+#   COMPOSE_PATH     - path to docker-compose dir (default: /root/monitoring)
 
 set -e
 
-MONITORING_IP="143.198.173.164"
+IP="${MONITORING_IP:-143.198.173.164}"
+USER="${MONITORING_USER:-root}"
+BRANCH="${REPO_BRANCH:-main}"
+REPO="${REPO_PATH:-/opt/monitoring-repo}"
+COMPOSE="${COMPOSE_PATH:-/root/monitoring}"
 
-echo "Pulling latest from git..."
-ssh root@$MONITORING_IP 'cd /opt/monitoring-repo && git pull origin main'
+echo "Pulling latest ($BRANCH) on $IP..."
+ssh "$USER@$IP" "cd $REPO && git pull origin $BRANCH"
 
 if [ "$1" = "--reset" ]; then
   echo "Resetting Grafana (wiping volume)..."
-  ssh root@$MONITORING_IP 'cd /root/monitoring && docker compose stop grafana && docker compose rm -f grafana && docker volume rm monitoring_grafana-data && docker compose up -d grafana'
+  ssh "$USER@$IP" "cd $COMPOSE && docker compose stop grafana && docker compose rm -f grafana && docker volume rm monitoring_grafana-data && docker compose up -d grafana"
 else
   echo "Restarting Grafana and Prometheus..."
-  ssh root@$MONITORING_IP 'cd /root/monitoring && docker compose restart grafana prometheus'
+  ssh "$USER@$IP" "cd $COMPOSE && docker compose restart grafana prometheus"
 fi
 
-echo "Done. Grafana: http://$MONITORING_IP:3000"
+echo "Done. Grafana: http://$IP:3000"
