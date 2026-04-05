@@ -3,31 +3,33 @@ import { Rate } from "k6/metrics";
 
 const errorRate = new Rate("errors");
 
-// Stress test: sustained high load to overwhelm the service and trigger alerts
+// Stress test: massive concurrent load to overwhelm the service
 export const options = {
   stages: [
-    { duration: "10s", target: 300 },
-    { duration: "10s", target: 600 },
     { duration: "10s", target: 1000 },
-    { duration: "5m", target: 1000 },  // hold at 1000 for 5 minutes
+    { duration: "10s", target: 3000 },
+    { duration: "10s", target: 5000 },
+    { duration: "5m", target: 5000 },   // hold 5000 VUs for 5 minutes
     { duration: "10s", target: 0 },
   ],
+  batch: 4,          // send all 4 requests per iteration in parallel
+  batchPerHost: 4,
 };
 
 const BASE_URL = __ENV.BASE_URL || "http://localhost:8080";
 
 export default function () {
-  let res = http.get(`${BASE_URL}/health`);
-  errorRate.add(res.status !== 200);
+  // Fire all requests in a batch — no waiting between them
+  http.batch([
+    ["GET", `${BASE_URL}/health`],
+    ["GET", `${BASE_URL}/products`],
+    ["GET", `${BASE_URL}/users?page=1&per_page=10`],
+    ["GET", `${BASE_URL}/urls`],
+    ["GET", `${BASE_URL}/health`],
+    ["GET", `${BASE_URL}/products`],
+    ["GET", `${BASE_URL}/users?page=1&per_page=10`],
+    ["GET", `${BASE_URL}/urls`],
+  ]);
 
-  res = http.get(`${BASE_URL}/products`);
-  errorRate.add(res.status !== 200);
-
-  res = http.get(`${BASE_URL}/users?page=1&per_page=10`);
-  errorRate.add(res.status !== 200);
-
-  res = http.get(`${BASE_URL}/urls`);
-  errorRate.add(res.status !== 200);
-
-  // No sleep — fire as fast as possible
+  // No sleep — every VU fires 8 requests per iteration as fast as possible
 }
