@@ -70,9 +70,9 @@ export default function InstancesPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Instance Overview</h1>
-        <p className="text-sm text-muted-foreground">
+      <div className="mb-8">
+        <h1 className="text-xl font-semibold">Instance Overview</h1>
+        <p className="mt-1 text-[13px] text-muted-foreground">
           Clusters across all regions and environments
         </p>
       </div>

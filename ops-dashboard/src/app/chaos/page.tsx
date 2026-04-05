@@ -155,8 +155,8 @@ export default function ChaosPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Chaos Engineering Console</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-xl font-semibold">Chaos Engineering Console</h1>
+          <p className="mt-1 text-[13px] text-muted-foreground">
             Inject failures to test resilience and alerting
           </p>
         </div>

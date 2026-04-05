@@ -87,8 +87,8 @@ export default function AlertsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Alert Management</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="text-xl font-semibold">Alert Management</h1>
+        <p className="mt-1 text-[13px] text-muted-foreground">
           Monitor, acknowledge, and resolve alerts
         </p>
       </div>

@@ -195,8 +195,8 @@ export default function MetricsPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Metrics Dashboard</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-xl font-semibold">Metrics Dashboard</h1>
+          <p className="mt-1 text-[13px] text-muted-foreground">
             Real-time application and system metrics from Prometheus
           </p>
         </div>

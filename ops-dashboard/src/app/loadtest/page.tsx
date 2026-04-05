@@ -82,8 +82,8 @@ export default function LoadTestPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Load Testing</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-xl font-semibold">Load Testing</h1>
+          <p className="mt-1 text-[13px] text-muted-foreground">
             Run k6 load tests against your environments
           </p>
         </div>

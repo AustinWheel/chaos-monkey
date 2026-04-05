@@ -82,8 +82,8 @@ export default function LogsPage() {
   return (
     <div className="flex h-[calc(100vh-3rem)] flex-col">
       <div className="mb-4">
-        <h1 className="text-2xl font-bold">Log Explorer</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="text-xl font-semibold">Log Explorer</h1>
+        <p className="mt-1 text-[13px] text-muted-foreground">
           Search and filter logs from Loki
         </p>
       </div>

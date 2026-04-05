@@ -86,8 +86,8 @@ export default function DeploymentsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Deployment History</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="text-xl font-semibold">Deployment History</h1>
+        <p className="mt-1 text-[13px] text-muted-foreground">
           Recent deployments across all regions
         </p>
       </div>
