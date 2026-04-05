@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  unit-tests:
-    name: Unit Tests
+  test:
+    name: Tests & Coverage
     runs-on: ubuntu-latest
 
     steps:
@@ -23,41 +23,8 @@ jobs:
       - name: Install dependencies
         run: uv sync --dev
 
-      - name: Run unit tests
-        run: uv run pytest tests/ -v --cov=app --cov-report=term-missing --cov-report=xml
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-data
-          path: |
-            coverage.xml
-            .coverage
-
-  coverage-check:
-    name: Code Coverage
-    needs: unit-tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download coverage artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-data
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
-
-      - name: Set up Python
-        run: uv python install 3.13
-
-      - name: Install dependencies
-        run: uv sync --dev
-
-      - name: Check coverage threshold
-        run: uv run coverage report --fail-under=70
+      - name: Run tests with coverage
+        run: uv run pytest tests/ -v --cov=app --cov-report=term-missing --cov-report=xml --cov-fail-under=70
 
       - name: Coverage comment on PR
         if: github.event_name == 'pull_request'
@@ -65,9 +32,8 @@ jobs:
         with:
           pytest-xml-coverage-path: coverage.xml
 
-  integration-tests:
-    name: Integration Tests
-    needs: unit-tests
+  deploy-staging:
+    needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
 
@@ -106,14 +72,14 @@ jobs:
       - name: Install dependencies
         run: uv sync --dev
 
-      - name: Run integration tests against staging
+      - name: Smoke tests against staging
         run: |
           uv run pytest tests/test_health.py -v
         env:
           BASE_URL: https://pe-hackathon-staging-f28oj.ondigitalocean.app
 
   deploy-prod:
-    needs: [unit-tests, coverage-check]
+    needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
