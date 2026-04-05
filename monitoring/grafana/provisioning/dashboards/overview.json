@@ -274,7 +274,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(http_requests_total{job=\"flask-prod\"}[2m]))",
+          "expr": "sum(rate(http_requests_total{job=\"flask-prod\"}[1m]))",
           "refId": "A"
         }
       ],
@@ -332,7 +332,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(http_errors_total{job=\"flask-prod\"}[2m])) / clamp_min(sum(rate(http_requests_total{job=\"flask-prod\"}[2m])), 0.001) * 100",
+          "expr": "sum(rate(http_errors_total{job=\"flask-prod\"}[1m])) / clamp_min(sum(rate(http_requests_total{job=\"flask-prod\"}[1m])), 0.001) * 100",
           "refId": "A"
         }
       ],
@@ -389,7 +389,7 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[2m])))",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[1m])))",
           "refId": "A"
         }
       ],
@@ -516,7 +516,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(http_requests_total{job=\"flask-prod\"}[2m]))",
+          "expr": "sum(rate(http_requests_total{job=\"flask-prod\"}[1m]))",
           "legendFormat": "prod",
           "refId": "A"
         }
@@ -573,7 +573,7 @@
       },
       "targets": [
         {
-          "expr": "sum by (endpoint) (rate(http_requests_total{job=\"flask-prod\"}[2m]))",
+          "expr": "sum by (endpoint) (rate(http_requests_total{job=\"flask-prod\"}[1m]))",
           "legendFormat": "{{endpoint}}",
           "refId": "A"
         }
@@ -673,7 +673,7 @@
       },
       "targets": [
         {
-          "expr": "sum by (status) (rate(http_requests_total{job=\"flask-prod\"}[2m]))",
+          "expr": "sum by (status) (rate(http_requests_total{job=\"flask-prod\"}[1m]))",
           "legendFormat": "{{status}}",
           "refId": "A"
         }
@@ -757,17 +757,17 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[2m])))",
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[1m])))",
           "legendFormat": "P50",
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[2m])))",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[1m])))",
           "legendFormat": "P95",
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[2m])))",
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[1m])))",
           "legendFormat": "P99",
           "refId": "C"
         }
@@ -825,7 +825,7 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile(0.95, sum by (le, endpoint) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[2m])))",
+          "expr": "histogram_quantile(0.95, sum by (le, endpoint) (rate(http_request_duration_seconds_bucket{job=\"flask-prod\"}[1m])))",
           "legendFormat": "{{endpoint}}",
           "refId": "A"
         }
@@ -909,7 +909,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(http_errors_total{job=\"flask-prod\"}[2m])) / clamp_min(sum(rate(http_requests_total{job=\"flask-prod\"}[2m])), 0.001) * 100",
+          "expr": "sum(rate(http_errors_total{job=\"flask-prod\"}[1m])) / clamp_min(sum(rate(http_requests_total{job=\"flask-prod\"}[1m])), 0.001) * 100",
           "legendFormat": "error rate",
           "refId": "A"
         }
@@ -965,7 +965,7 @@
       },
       "targets": [
         {
-          "expr": "sum by (endpoint) (increase(http_errors_total{job=\"flask-prod\"}[5m]))",
+          "expr": "sum by (endpoint) (increase(http_errors_total{job=\"flask-prod\"}[1m]))",
           "legendFormat": "{{endpoint}}",
           "refId": "A"
         }
@@ -1021,7 +1021,7 @@
       },
       "targets": [
         {
-          "expr": "sum by (status) (increase(http_requests_total{job=\"flask-prod\", status=~\"4..|5..\"}[5m]))",
+          "expr": "sum by (status) (increase(http_requests_total{job=\"flask-prod\", status=~\"4..|5..\"}[1m]))",
           "legendFormat": "{{status}}",
           "refId": "A"
         }
