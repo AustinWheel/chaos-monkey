@@ -8,6 +8,15 @@ scrape_configs:
     scheme: https
     static_configs:
       - targets:
-          - PLACEHOLDER_APP_URL
+          - pe-hackathon-hni9m.ondigitalocean.app
         labels:
           environment: "prod"
+
+  - job_name: "flask-staging"
+    metrics_path: "/prom-metrics"
+    scheme: https
+    static_configs:
+      - targets:
+          - pe-hackathon-staging-stj5i.ondigitalocean.app
+        labels:
+          environment: "staging"

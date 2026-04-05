@@ -31,14 +31,12 @@ services:
 
 databases:
   - name: db
+    cluster_name: hackathon-db
     engine: PG
     version: "16"
     production: true
-    cluster_name: hackathon-db
-    db_name: hackathon
-    db_user: hackathon
   - name: redis
+    cluster_name: hackathon-redis
     engine: REDIS
     version: "8"
     production: true
-    cluster_name: hackathon-redis
