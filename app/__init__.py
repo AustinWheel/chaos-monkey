@@ -34,13 +34,8 @@ def setup_logging(app):
     stdout_handler.setFormatter(formatter)
     stdout_handler.addFilter(region_filter)
 
-    file_handler = logging.FileHandler("app.log")
-    file_handler.setFormatter(formatter)
-    file_handler.addFilter(region_filter)
-
     app.logger.handlers.clear()
     app.logger.addHandler(stdout_handler)
-    app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
 
     # Loki handler — only active when LOKI_URL is set

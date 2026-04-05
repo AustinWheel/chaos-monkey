@@ -1,25 +1,22 @@
-import logging
-
 import psutil
 from flask import Blueprint, jsonify
 
-logger = logging.getLogger(__name__)
 metrics_bp = Blueprint("metrics", __name__)
+
+_cached = {"cpu_percent": 0.0, "memory_percent": 0.0, "memory_used_mb": 0.0, "memory_total_mb": 0.0}
+
+vm = psutil.virtual_memory()
+_cached["cpu_percent"] = psutil.cpu_percent(interval=0)
+_cached["memory_percent"] = vm.percent
+_cached["memory_used_mb"] = round(vm.used / 1024 ** 2, 1)
+_cached["memory_total_mb"] = round(vm.total / 1024 ** 2, 1)
 
 
 @metrics_bp.route("/metrics")
 def metrics():
-    try:
-        cpu = psutil.cpu_percent()
-        vm = psutil.virtual_memory()
-        data = {
-            "cpu_percent": cpu,
-            "memory_percent": vm.percent,
-            "memory_used_mb": round(vm.used / 1024 ** 2, 1),
-            "memory_total_mb": round(vm.total / 1024 ** 2, 1),
-        }
-        logger.info("Metrics collected", extra={"component": "metrics", **data})
-        return jsonify(data)
-    except Exception as e:
-        logger.error("Failed to collect metrics", extra={"component": "metrics", "error": str(e)})
-        return jsonify({"error": "Internal server error"}), 500
+    vm = psutil.virtual_memory()
+    _cached["cpu_percent"] = psutil.cpu_percent(interval=0)
+    _cached["memory_percent"] = vm.percent
+    _cached["memory_used_mb"] = round(vm.used / 1024 ** 2, 1)
+    _cached["memory_total_mb"] = round(vm.total / 1024 ** 2, 1)
+    return jsonify(_cached)

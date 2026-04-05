@@ -1,8 +1,8 @@
 import os
 from urllib.parse import urlparse
 
-from peewee import DatabaseProxy, Model, PostgresqlDatabase
-from playhouse.db_url import connect
+from peewee import DatabaseProxy, Model
+from playhouse.pool import PooledPostgresqlDatabase
 
 db = DatabaseProxy()
 
@@ -16,25 +16,27 @@ def init_db(app):
     database_url = os.environ.get("DATABASE_URL")
 
     if database_url:
-        # DigitalOcean / production — use the connection string
         parsed = urlparse(database_url)
         sslmode = os.environ.get("DATABASE_SSLMODE", "require")
-        database = PostgresqlDatabase(
+        database = PooledPostgresqlDatabase(
             parsed.path.lstrip("/"),
             host=parsed.hostname,
             port=parsed.port or 5432,
             user=parsed.username,
             password=parsed.password,
             sslmode=sslmode,
+            max_connections=32,
+            stale_timeout=300,
         )
     else:
-        # Local development — use individual env vars
-        database = PostgresqlDatabase(
+        database = PooledPostgresqlDatabase(
             os.environ.get("DATABASE_NAME", "hackathon_db"),
             host=os.environ.get("DATABASE_HOST", "localhost"),
             port=int(os.environ.get("DATABASE_PORT", 5432)),
             user=os.environ.get("DATABASE_USER", "postgres"),
             password=os.environ.get("DATABASE_PASSWORD", "postgres"),
+            max_connections=32,
+            stale_timeout=300,
         )
 
     db.initialize(database)
