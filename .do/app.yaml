@@ -9,8 +9,8 @@ services:
       deploy_on_push: true
     dockerfile_path: Dockerfile
     http_port: 8080
-    instance_size_slug: apps-d-1vcpu-2gb
-    instance_count: 2
+    instance_size_slug: apps-d-2vcpu-4gb
+    instance_count: 3
     health_check:
       http_path: /health
       initial_delay_seconds: 10
