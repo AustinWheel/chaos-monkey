@@ -36,14 +36,20 @@ TOTAL                          878    218    75%
 
 132 passed
 ```
+![Test Coverage Screenshot](./images/test-coverage.png)
+![Test Coverage Github](./images/gh-test-coverage.png)
 
-> TODO: Screenshot of full `uv run pytest tests/ -v --cov=app` terminal output
+[Automatically runs on every change](https://github.com/AustinWheel/chaos-monkey/pull/9#issuecomment-4188854034)
 
 #### CI runs tests automatically
 - **Config:** [`.github/workflows/tests.yml`](../.github/workflows/tests.yml)
 - CI runs on every push to `main`/`staging` and every PR to `main`
 
-> TODO: Screenshot of PR #8 Checks tab showing green test job
+[PR Pipeline](https://github.com/AustinWheel/chaos-monkey/actions/runs/24001996659)
+
+[Main Pipeline](https://github.com/AustinWheel/chaos-monkey/actions/runs/24001601222)
+![CI Pipeline](./images/gh-main-ci-pipeline.png)
+![CI Pipeline](./images/gh-pr-ci-pipeline.png)
 
 ### Silver
 
@@ -55,7 +61,7 @@ Covered above — 75% coverage exceeds both Silver (50%) and Gold (70%) threshol
 - **Integration tests:** [`tests/test_urls_integration.py`](../tests/test_urls_integration.py), [`tests/test_users_integration.py`](../tests/test_users_integration.py), [`tests/test_events_integration.py`](../tests/test_events_integration.py)
 - E2E tests run automatically on every PR in the `e2e-staging` CI job
 
-> TODO: Screenshot of the `e2e-staging` job running in CI
+![E2E Staging CI Job](./images/e2e-staging-ci-job.png)
 
 #### Error handling documented
 - **Document:** [`docs/reliability/error-handling.md`](reliability/error-handling.md)
@@ -108,7 +114,7 @@ Docker Compose also has `restart: always` on all app services ([`docker-compose.
 - **Document:** [`docs/README.md`](README.md#architecture)
 - Mermaid diagram showing App Platform, managed databases, monitoring droplet, CI/CD pipeline
 
-> TODO: Screenshot of the rendered Mermaid diagram on GitHub
+![Architecture Diagram](./images/architecture-diagram.png)
 
 #### API endpoints documented
 - **Document:** [`docs/README.md`](README.md#api-endpoints)
@@ -156,7 +162,7 @@ Docker Compose also has `restart: always` on all app services ([`docker-compose.
 k6 run --env BASE_URL=https://pe-hackathon-hni9m.ondigitalocean.app loadtests/baseline.js
 ```
 
-> TODO: Screenshot of k6 terminal output showing 50 VUs, request rate, p95 latency, error rate
+![Bronze K6 Terminal Output](./images/load-test-bronze.png)
 
 #### Baseline p95 documented
 - **Document:** [`docs/scalability/load-test-baseline.md`](scalability/load-test-baseline.md)
@@ -168,7 +174,7 @@ k6 run --env BASE_URL=https://pe-hackathon-hni9m.ondigitalocean.app loadtests/ba
 k6 run --env BASE_URL=https://pe-hackathon-hni9m.ondigitalocean.app loadtests/silver.js
 ```
 
-> TODO: Screenshot of k6 terminal output showing 200 VUs with p95 < 3s
+![Silver K6 Terminal Output](./images/load-test-silver.png)
 
 #### Multiple app instances in Docker Compose
 - **Config:** [`docker-compose.yml`](../docker-compose.yml) — 3 app instances (`app1`, `app2`, `app3`) each with `restart: always`
@@ -186,8 +192,7 @@ Shown in silver k6 output — threshold is `http_req_duration: ["p(95)<3000"]`
 ```bash
 k6 run --env BASE_URL=https://pe-hackathon-hni9m.ondigitalocean.app loadtests/gold.js
 ```
-
-> TODO: Screenshot of k6 terminal output showing 500 VUs
+![Gold K6 Terminal Output](./images/load-test-gold.png)
 
 #### Redis caching implementation
 - **Cache layer:** [`app/cache.py`](../app/cache.py) — `cache_get()`, `cache_set()`, `cache_delete_pattern()` with graceful degradation
@@ -228,8 +233,8 @@ Example log entry:
   "environment": "prod"
 }
 ```
-
-> TODO: Screenshot of Grafana Logs Explorer showing JSON log entries with timestamp and level
+![Grafana Logs Explorer](./images/grafana-loki-logs-explorer.png)
+![Grafana Logs Dashboard](./images/grafana-logs-dashboard.png)
 
 #### `/metrics` endpoint
 ```bash
@@ -249,8 +254,6 @@ Prometheus metrics also exposed at `/prom-metrics` with counters, histograms, an
 - Powered by Loki — all app logs are shipped via HTTP push from the Flask app
 - Queryable by level, component, environment without any SSH access
 
-> TODO: Screenshot of Grafana Logs Explorer dashboard with log entries visible
-
 ### Silver
 
 #### Alert rules configured
@@ -268,14 +271,14 @@ Prometheus metrics also exposed at `/prom-metrics` with counters, histograms, an
 | High Memory | Memory > 85% for 2m | Warning |
 | High Saturation | In-flight > 50 for 1m | Warning |
 
-> TODO: Screenshot of Grafana Alerting page showing the rules
+![Grafana Alerting Rules](./images/grafana-alert-rules.png)
 
 #### Alerts routed to Discord
 - **Contact point config:** [`monitoring/grafana/provisioning/alerting/contactpoints.yml`](../monitoring/grafana/provisioning/alerting/contactpoints.yml)
 - Discord webhook receives all alerts with severity, summary, and dashboard links
 - Can test with: `curl https://pe-hackathon-hni9m.ondigitalocean.app/chaos/critical`
 
-> TODO: Screenshot of Discord showing an alert notification
+![Discord Alert Notification](./images/discord-alert.png)
 
 #### Alerting latency under 5 minutes
 - Grafana evaluates alert rules every **1 minute**
@@ -292,7 +295,7 @@ Prometheus metrics also exposed at `/prom-metrics` with counters, histograms, an
 - **Errors:** Error rate %, 5xx by endpoint, 4xx/5xx breakdown
 - **Saturation:** CPU, memory, in-flight requests, file descriptors
 
-> TODO: Screenshot of the full Grafana Overview dashboard
+![Grafana Overview Dashboard](./images/grafana-production-overview.png)
 
 #### Runbook with alert-response procedures
 - **Document:** [`docs/observability/runbook.md`](observability/runbook.md)
@@ -310,21 +313,9 @@ Prometheus metrics also exposed at `/prom-metrics` with counters, histograms, an
 
 ---
 
-## TODO Summary
-
-Items that need screenshots or videos from you:
+## Remaining TODOs
 
 | Item | Action |
 |---|---|
-| CI green checks | Screenshot PR #8 Checks tab |
-| E2E staging job | Screenshot of `e2e-staging` job in CI |
-| Service restart video | Video: trigger health-fail → App Platform restart → health OK |
-| Architecture diagram | Screenshot of Mermaid rendering on GitHub |
-| k6 Bronze (50 users) | Run `k6 run --env BASE_URL=... loadtests/baseline.js`, screenshot |
-| k6 Silver (200 users) | Run `k6 run --env BASE_URL=... loadtests/silver.js`, screenshot |
-| k6 Gold (500 users) | Run `k6 run --env BASE_URL=... loadtests/gold.js`, screenshot |
-| Grafana logs | Screenshot of Logs Explorer dashboard |
-| Grafana alerts page | Screenshot of Alerting rules page |
-| Discord alert | Trigger `/chaos/critical`, screenshot Discord |
-| Grafana dashboard | Screenshot of full Overview dashboard |
+| Service restart video | Video: trigger health-fail, show App Platform restart, show recovery |
 | Root-cause analysis | Walk through a chaos incident with screenshots (see steps above) |
